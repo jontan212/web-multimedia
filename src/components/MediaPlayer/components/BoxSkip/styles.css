@@ -1,0 +1,23 @@
+/* ********** BOX SKIP ********** */
+.box_skip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  background-color: var(--black-50);
+  transition: all ease-in 0.2s;
+}
+
+.box_skip:hover {
+  -webkit-filter: invert(100%);
+  filter: invert(100%);
+}
+
+.box_skip_previous {
+  grid-area: box_previous;
+  justify-self: end;
+}
+
+.box_skip_next {
+  grid-area: box_next;
+}

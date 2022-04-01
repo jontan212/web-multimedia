@@ -1,0 +1,34 @@
+.media_player {
+  position: relative;
+  top: 100px;
+
+  display: flex;
+  margin: auto;
+  --white-50: rgba(255, 255, 255, 0.5);
+  --black-50: rgba(0, 0, 0, 0.5);
+}
+
+video {
+  width: 100%;
+}
+
+/* ********** OPTIONS ********** */
+.options {
+  position: absolute;
+  top: 0;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr) 1fr repeat(2, 1fr);
+  grid-template-rows: 1fr 4fr 1fr 3.125rem;
+  grid-template-areas: 
+    ".              .              .              .              ."
+    "box_previous   .              play_pause     .              box_next"
+    ".              .              .              skip_intro     skip_intro"
+    "footer_options footer_options footer_options footer_options footer_options";
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: opacity ease-in 0.2s;
+}

@@ -1,0 +1,17 @@
+.skip_intro{
+    grid-area: skip_intro;
+    place-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    color: white;
+    background-color: var(--black-50);
+    transition: all ease-in 0.2s;
+}
+
+.skip_intro:hover{
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
+}

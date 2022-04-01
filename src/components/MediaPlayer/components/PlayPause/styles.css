@@ -1,0 +1,16 @@
+/* ********** PLAY AND PAUSE BUTTON ********** */
+.play_pause {
+  place-self: center;
+  display: flex;
+  grid-area: play_pause;
+  width: 100%;
+  max-width: 216px;
+  height: 43%;
+  max-height: 216px;
+}
+
+.play_pause img {
+  width: 50%;
+  max-width: 90px;
+  margin: auto;
+}
