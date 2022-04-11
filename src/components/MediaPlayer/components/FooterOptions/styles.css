@@ -3,6 +3,7 @@
   grid-area: footer_options;
   display: flex;
   align-items: center;
+  column-gap: 10px;
   padding: 0 1rem;
 
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
@@ -14,6 +15,32 @@ button {
   background-color: #00000000;
   border: 0px;
 }
+
 button img {
   height: 100%;
+}
+
+/* ********** CONTAINER PROGRESS BAR ********** */
+.container-progress-bar {
+  display: flex;
+  align-items: center;
+  column-gap: inherit;
+  width: 100%;
+  color: #ffffff;
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-height: 2px;
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 100px;
+}
+
+.pointer {
+  width: 14px;
+  height: 14px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 100px;
 }
