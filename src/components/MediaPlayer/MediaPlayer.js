@@ -57,7 +57,7 @@ const MediaPlayer = () => {
         ></BoxSkip>
         <Skip message="Saltar Opening"></Skip>
 
-        <FooterOptions ref_video={refVideo} ref_media={refMedia} ></FooterOptions>
+        <FooterOptions ref_video={refVideo} ref_media={refMedia} setSrc_svg={setSrc_svg} ></FooterOptions>
       </div>
     </div>
   );

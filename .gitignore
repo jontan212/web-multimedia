@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+#ignorar todos los archivos que no sean necesarios
+public/videos/eva_3.mkv

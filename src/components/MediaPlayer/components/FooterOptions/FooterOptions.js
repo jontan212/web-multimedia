@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./styles.css";
 
-const FooterOptions = ({ ref_video, ref_media }) => {
-  const refInputRange = useRef();
+const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
+  const refContainer = useRef(),
+    refProgress = useRef(),
+    refPointer = useRef(),
+    refOnMinute = useRef();
+
   const [totalTime, setTotalTime] = useState(),
     [currentTime, setCurrentTime] = useState();
 
@@ -15,26 +19,29 @@ const FooterOptions = ({ ref_video, ref_media }) => {
     setCurrentTime(convertion(ref_video.current.currentTime));
     ref_video.current.ontimeupdate = () => {
       setCurrentTime(convertion(ref_video.current.currentTime));
+      if (ref_video.current.currentTime === ref_video.current.duration) {
+        setSrc_svg("./assets/play.svg");
+      }
     };
-  }, []);
+  }, [ref_video, setSrc_svg]);
 
   useEffect(() => {
+    let progressInfo = refProgress.current.getBoundingClientRect();
     // ON TIME UPDATE
-    ref_video.current.ontimeupdate = () => {
-      let percentage =
-        (100 * ref_video.current.currentTime) / ref_video.current.duration;
-      // console.log(percentage);
-      // 100 / 23
-      // 500 / x
+    let positionBG =
+      (progressInfo.width * ref_video.current.currentTime) /
+      ref_video.current.duration;
+    refProgress.current.setAttribute(
+      "style",
+      `background-image: linear-gradient(to right ,white ${positionBG}px, black -100%);`
+    );
 
-      refInputRange.current.setAttribute("value", (1000 * percentage)/ 100);
-
-      refInputRange.current.style.backgroundImage = `-webkit-gradient(linear, left top, right top,
-      color-stop(${percentage}%, #FFFFFF),
-      color-stop(${percentage}%, #9B9B9B)`;
-      refInputRange.current.style.backgroundImage = `-moz-linear-gradient(left center, #FFFFFF 0%, #FFFFFF ${percentage}%, #9B9B9B ${percentage}%, #9B9B9B 100%)`;
-    };
-  }, [ref_video]);
+    if (positionBG > 7 && positionBG < progressInfo.width - 7) {
+      refPointer.current.style.left = `${
+        positionBG - refPointer.current.clientWidth / 2
+      }px`;
+    }
+  }, [ref_video, currentTime]);
 
   // MUTED
   const muted = () => {
@@ -81,50 +88,120 @@ const FooterOptions = ({ ref_video, ref_media }) => {
       : (time = horas <= 9 ? "0" + horas + ":" + time : horas + ":" + time);
   };
 
-  // INPUT RANGE
-  const range = (e) => {
-    let val = (e.target.value - e.target.min) / (e.target.max - e.target.min);
-    let percent = val * 100;
-    e.target.style.backgroundImage = `-webkit-gradient(linear, left top, right top,
-      color-stop(${percent}%, #FFFFFF),
-      color-stop(${percent}%, #9B9B9B)`;
-    e.target.style.backgroundImage = `-moz-linear-gradient(left center, #FFFFFF 0%, #FFFFFF ${percent}%, #9B9B9B ${percent}%, #9B9B9B 100%)`;
+  // MOVE POINTER TO A POINT ON THE PROGRESS BAR
+  const moveToPosition = (e) => {
+    let progressInfo = refProgress.current.getBoundingClientRect();
+
+    let pointerPosition = e.pageX - refContainer.current.offsetLeft;
+
+    if (pointerPosition > 7 && pointerPosition < progressInfo.width - 7) {
+      refPointer.current.setAttribute(
+        "style",
+        "left: " + (pointerPosition - 7) + "px"
+      );
+    }
+
+    if (pointerPosition <= 7) {
+      refPointer.current.setAttribute("style", "left: 0px");
+    }
+
+    if (pointerPosition >= refProgress.current.clientWidth - 7) {
+      refPointer.current.setAttribute(
+        "style",
+        "left: " +
+          (refProgress.current.clientWidth - refPointer.current.clientWidth) +
+          "px"
+      );
+    }
+
+    refProgress.current.setAttribute(
+      "style",
+      `background-image: linear-gradient(to right ,white ${pointerPosition}px, black -100%);`
+    );
+
+    // Here, I calculate the second I'm going to jump into the video
+    ref_video.current.currentTime =
+      (pointerPosition * ref_video.current.duration) /
+      refProgress.current.clientWidth;
   };
 
-  // ON TIME UPDATE
-  const timeUpdate = () => {
-    // ref_video.current.setAttribute('value', percentage);
-    // console.log(ref_video.current);
-    // ref_video.current.setAttribute('value', `${percentage}`);
-    // e.target.setAttribute('value', percentage);
+  const pointerFollowsCursor = (r) => {
+    let progressInfo = refProgress.current.getBoundingClientRect();
+
+    refProgress.current.setAttribute(
+      "style",
+      `background-image: linear-gradient(to right ,white ${
+        r.pageX - progressInfo.x
+      }px, black -100%);`
+    );
+
+    if (r.pageX - 7 > progressInfo.x && r.pageX + 8 < progressInfo.right) {
+      refPointer.current.setAttribute(
+        "style",
+        `left: ${r.pageX - 7 - progressInfo.x}px;`
+      );
+    }
+
+    if (r.pageX <= progressInfo.x) {
+      refPointer.current.setAttribute("style", "left: 0px;");
+    }
+
+    if (r.pageX >= progressInfo.right) {
+      refPointer.current.setAttribute(
+        "style",
+        `left: ${
+          refProgress.current.clientWidth - refPointer.current.clientWidth
+        }px;`
+      );
+    }
+
+    refOnMinute.current.setAttribute("style", "display: block;");
+
+    // Here, I calculate the second I'm going to jump into the video while move the cursor
+    ref_video.current.currentTime =
+      ((r.pageX - progressInfo.x) * ref_video.current.duration) /
+      refProgress.current.clientWidth;
   };
+
+  const leftClickEvent = (e) => {
+    if (e.buttons === 1) {
+      document.body.setAttribute(
+        "style",
+        "-webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;"
+      );
+      moveToPosition(e);
+      document.addEventListener("mousemove", pointerFollowsCursor);
+    }
+  };
+
+  document.addEventListener("mouseup", () => {
+    document.removeEventListener("mousemove", pointerFollowsCursor);
+    refOnMinute.current.removeAttribute("style");
+    document.body.removeAttribute("style");
+  });
 
   return (
     <div className="footer_options">
       <Btn src_img="./assets/volume.svg" alt_img="Volume" fc={muted}></Btn>
       <div className="container-progress-bar">
         <span>{currentTime}</span>
-        <input
-          type="range"
-          min="0"
-          max="1000"
-          // defaultValue="0"
-          onMouseMove={range}
-          onChange={timeUpdate}
-          style={{
-            backgroundImage:
-              "-webkit-gradient(linear, 0% 0%, 100% 0%, from(rgb(255, 255, 255)), from(rgb(155, 155, 155)))",
-          }}
-          ref={refInputRange}
-        ></input>
-        {/* <div className="progress">
-          <div
-            className="pointer"
-            onMouseDown={pointer}
-            onMouseUp={des}
-            style={{ left: `${left}px` }}
-          ></div>
-        </div> */}
+        <div
+          className="container"
+          ref={refContainer}
+          onMouseDown={leftClickEvent}
+        >
+          <div className="progress" ref={refProgress}>
+            <div
+              className="pointer"
+              ref={refPointer}
+              onMouseDown={leftClickEvent}
+            >
+              <div className="onMinute" ref={refOnMinute}>
+                {currentTime}
+              </div>
+            </div>
+          </div>
+        </div>
         <span>{totalTime}</span>
       </div>
       <Btn
@@ -132,7 +209,7 @@ const FooterOptions = ({ ref_video, ref_media }) => {
         alt_img="Volume"
         fc={fullScreen}
       ></Btn>
-      <Btn src_img="./assets/settings.svg" alt_img="Volume"></Btn>
+      <Btn src_img="./assets/settings.svg" alt_img="Settings"></Btn>
     </div>
   );
 };
