@@ -8,7 +8,8 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
     refOnMinute = useRef();
 
   const [totalTime, setTotalTime] = useState(),
-    [currentTime, setCurrentTime] = useState();
+    [currentTime, setCurrentTime] = useState(),
+    [isMouseDown, setIsMouseDown] = useState(false);
 
   useEffect(() => {
     // TOTAL DURATION OF THE VIDEO
@@ -23,25 +24,36 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
         setSrc_svg("./assets/play.svg");
       }
     };
-  }, [ref_video, setSrc_svg]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    let progressInfo = refProgress.current.getBoundingClientRect();
-    // ON TIME UPDATE
-    let positionBG =
-      (progressInfo.width * ref_video.current.currentTime) /
-      ref_video.current.duration;
-    refProgress.current.setAttribute(
-      "style",
-      `background-image: linear-gradient(to right ,white ${positionBG}px, black -100%);`
-    );
+    if (!isMouseDown) {
+      let progressInfo = refProgress.current.getBoundingClientRect();
+      // ON TIME UPDATE
+      let positionBG =
+        (progressInfo.width * ref_video.current.currentTime) /
+        ref_video.current.duration;
+      refProgress.current.setAttribute(
+        "style",
+        `background-image: linear-gradient(to right ,white ${positionBG}px, black -100%);`
+      );
 
-    if (positionBG > 7 && positionBG < progressInfo.width - 7) {
-      refPointer.current.style.left = `${
-        positionBG - refPointer.current.clientWidth / 2
-      }px`;
+      if (
+        positionBG > 7 &&
+        positionBG < progressInfo.width - refPointer.current.clientWidth / 2
+      ) {
+        refPointer.current.style.left = `${
+          positionBG - refPointer.current.clientWidth / 2
+        }px`;
+      }
+
+      if (positionBG <= refPointer.current.clientWidth / 2) {
+        refPointer.current.setAttribute("style", "left: 0px");
+      }
     }
-  }, [ref_video, currentTime]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentTime]);
 
   // MUTED
   const muted = () => {
@@ -125,28 +137,30 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
       refProgress.current.clientWidth;
   };
 
-  const pointerFollowsCursor = (r) => {
+  // POINTER FOLLOW THE MOUSE
+  const pointerFollowsCursor = (e) => {
     let progressInfo = refProgress.current.getBoundingClientRect();
+    let pointerPosition = e.pageX - refContainer.current.offsetLeft;
 
     refProgress.current.setAttribute(
       "style",
       `background-image: linear-gradient(to right ,white ${
-        r.pageX - progressInfo.x
+        e.pageX - progressInfo.x
       }px, black -100%);`
     );
 
-    if (r.pageX - 7 > progressInfo.x && r.pageX + 8 < progressInfo.right) {
+    if (pointerPosition > 7 && pointerPosition < progressInfo.width - 7) {
       refPointer.current.setAttribute(
         "style",
-        `left: ${r.pageX - 7 - progressInfo.x}px;`
+        `left: ${e.pageX - 8 - progressInfo.x}px;`
       );
     }
 
-    if (r.pageX <= progressInfo.x) {
+    if (e.pageX <= progressInfo.x) {
       refPointer.current.setAttribute("style", "left: 0px;");
     }
 
-    if (r.pageX >= progressInfo.right) {
+    if (e.pageX >= progressInfo.right) {
       refPointer.current.setAttribute(
         "style",
         `left: ${
@@ -159,12 +173,23 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
 
     // Here, I calculate the second I'm going to jump into the video while move the cursor
     ref_video.current.currentTime =
-      ((r.pageX - progressInfo.x) * ref_video.current.duration) /
+      ((e.pageX - progressInfo.x) * ref_video.current.duration) /
       refProgress.current.clientWidth;
   };
 
   const leftClickEvent = (e) => {
+    const remove = () => {
+      document.removeEventListener("mousemove", pointerFollowsCursor);
+      refOnMinute.current.removeAttribute("style");
+      document.body.removeAttribute("style");
+      setIsMouseDown(false);
+      document.removeEventListener("mouseup", remove);
+    };
+
     if (e.buttons === 1) {
+      document.addEventListener("mouseup", remove);
+
+      setIsMouseDown(true);
       document.body.setAttribute(
         "style",
         "-webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;"
@@ -173,12 +198,6 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
       document.addEventListener("mousemove", pointerFollowsCursor);
     }
   };
-
-  document.addEventListener("mouseup", () => {
-    document.removeEventListener("mousemove", pointerFollowsCursor);
-    refOnMinute.current.removeAttribute("style");
-    document.body.removeAttribute("style");
-  });
 
   return (
     <div className="footer_options">
