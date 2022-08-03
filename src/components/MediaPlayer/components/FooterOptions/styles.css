@@ -65,8 +65,9 @@ button img {
 
 .onMinute {
   display: none;
-  position: relative;
-  left: 50%;
+  /* position: relative; */
+  position: absolute;
+  /* left: 50%; */
   top: -30px;
   width: max-content;
   padding: 3px;
@@ -75,9 +76,13 @@ button img {
 
   background-color: var(--black-50);
   border-radius: 2px;
-  transform: translate(-50%);
+  /* transform: translate(-50%); */
 }
 
 .container:hover .onMinute {
+  display: block;
+}
+
+.visible{
   display: block;
 }

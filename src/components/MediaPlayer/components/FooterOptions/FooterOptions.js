@@ -154,6 +154,11 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
         "style",
         `left: ${e.pageX - 8 - progressInfo.x}px;`
       );
+
+      refOnMinute.current.setAttribute(
+        "style",
+        `left: ${pointerPosition - refOnMinute.current.clientWidth / 2}px;`
+      );
     }
 
     if (e.pageX <= progressInfo.x) {
@@ -169,8 +174,6 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
       );
     }
 
-    refOnMinute.current.setAttribute("style", "display: block;");
-
     // Here, I calculate the second I'm going to jump into the video while move the cursor
     ref_video.current.currentTime =
       ((e.pageX - progressInfo.x) * ref_video.current.duration) /
@@ -180,13 +183,14 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
   const leftClickEvent = (e) => {
     const remove = () => {
       document.removeEventListener("mousemove", pointerFollowsCursor);
-      refOnMinute.current.removeAttribute("style");
       document.body.removeAttribute("style");
       setIsMouseDown(false);
+      refOnMinute.current.classList.toggle("visible");
       document.removeEventListener("mouseup", remove);
     };
 
     if (e.buttons === 1) {
+      refOnMinute.current.classList.toggle("visible");
       document.addEventListener("mouseup", remove);
 
       setIsMouseDown(true);
@@ -199,6 +203,20 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
     }
   };
 
+  const eventOnMinute = (e) => {
+    let pointerPosition = e.pageX - refContainer.current.offsetLeft;
+    refOnMinute.current.setAttribute(
+      "style",
+      `left: ${pointerPosition - refOnMinute.current.clientWidth / 2}px;`
+    );
+
+    let text = convertion(
+      (pointerPosition * ref_video.current.duration) /
+        refProgress.current.clientWidth
+    );
+    refOnMinute.current.textContent = text.includes("-1") ? "00:00" : text;
+  };
+
   return (
     <div className="footer_options">
       <Btn src_img="./assets/volume.svg" alt_img="Volume" fc={muted}></Btn>
@@ -208,16 +226,20 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
           className="container"
           ref={refContainer}
           onMouseDown={leftClickEvent}
+          onMouseMove={eventOnMinute}
         >
+          <div className="onMinute" ref={refOnMinute}>
+            {(currentTime + "").includes("-1") ? "00:00" : currentTime}
+          </div>
           <div className="progress" ref={refProgress}>
             <div
               className="pointer"
               ref={refPointer}
               onMouseDown={leftClickEvent}
             >
-              <div className="onMinute" ref={refOnMinute}>
+              {/* <div className="onMinute" ref={refOnMinute}>
                 {currentTime}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
