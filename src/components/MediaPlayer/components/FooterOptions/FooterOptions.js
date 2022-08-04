@@ -56,11 +56,32 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
   }, [currentTime]);
 
   // MUTED
-  const muted = () => {
-    if (!ref_video.current.muted) {
-      ref_video.current.muted = true;
-    } else {
-      ref_video.current.muted = false;
+  const muted = (e) => {
+    if (e.target.tagName === "IMG") {
+      let $img = e.target,
+        $inputRange = $img.previousSibling,
+        $button = $img.parentNode;
+
+      if ($button.classList.contains("muted")) {
+        $button.classList.remove("muted");
+        $inputRange.value = 50;
+        ref_video.current.volume = 0.5;
+      } else {
+        $button.classList.add("muted");
+        $inputRange.value = 0;
+        ref_video.current.volume = 0;
+      }
+    }
+  };
+
+  const volume = (e) => {
+    // e.target.nextSibling.classList.remove("muted");
+    e.target.parentNode.classList.remove("muted");
+    let currentVolume = e.target.value / 100;
+    ref_video.current.volume = currentVolume;
+    if (currentVolume === 0) {
+      // e.target.nextSibling.classList.add("muted");
+      e.target.parentNode.classList.toggle("muted");
     }
   };
 
@@ -219,7 +240,10 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
 
   return (
     <div className="footer_options">
-      <Btn src_img="./assets/volume.svg" alt_img="Volume" fc={muted}></Btn>
+      <Btn src_img="./assets/volume.svg" alt_img="Volume" fc={muted}>
+        <span className="hover_volume"></span>
+        <input className="volume" type="range" onChange={volume}></input>
+      </Btn>
       <div className="container-progress-bar">
         <span>{currentTime}</span>
         <div
@@ -255,9 +279,10 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
   );
 };
 
-const Btn = ({ src_img, alt_img, fc }) => {
+const Btn = ({ src_img, alt_img, fc, children }) => {
   return (
     <button onClick={fc}>
+      {children}
       <img src={src_img} alt={alt_img}></img>
     </button>
   );

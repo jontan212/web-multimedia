@@ -20,6 +20,36 @@ button img {
   height: 100%;
 }
 
+/* ********** MUTED ********** */
+button {
+  position: relative;
+}
+.muted {
+  opacity: 0.5;
+}
+
+.volume {
+  display: none;
+  position: absolute;
+  width: 130px;
+  left: -157%;
+  
+  transform: rotate(-90deg) translateX(60%);
+  -webkit-transform: rotate(-90deg) translateX(60%);
+  -moz-transform: rotate(-90deg) translateX(60%);
+}
+
+button:hover .volume {
+  display: block;
+}
+
+button .hover_volume{
+  position: absolute;
+  width: 30px;
+  height: 40px;
+  top: -20px;
+}
+
 /* ********** CONTAINER PROGRESS BAR ********** */
 .container-progress-bar {
   display: flex;
@@ -29,7 +59,7 @@ button img {
   color: #ffffff;
 }
 
-.container-progress-bar span{
+.container-progress-bar span {
   width: 100%;
   max-width: 3.75rem;
   text-align: center;
@@ -80,6 +110,6 @@ button img {
   display: block;
 }
 
-.visible{
+.visible {
   display: block;
 }
