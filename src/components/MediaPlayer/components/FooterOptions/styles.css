@@ -23,6 +23,7 @@ button img {
 /* ********** MUTED ********** */
 button {
   position: relative;
+  z-index: 1;
 }
 .muted {
   opacity: 0.5;
@@ -48,6 +49,7 @@ button .hover_volume{
   width: 30px;
   height: 40px;
   top: -20px;
+  z-index: -1;
 }
 
 /* ********** CONTAINER PROGRESS BAR ********** */
