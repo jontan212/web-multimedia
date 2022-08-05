@@ -238,6 +238,37 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
     refOnMinute.current.textContent = text.includes("-1") ? "00:00" : text;
   };
 
+  const settings = (
+    <ul className="box_settings">
+      <li>
+        Velocidad:&nbsp;Normal
+        <ul>
+          <li data-speed="0.25">x0.25</li>
+          <li data-speed="0.5">x0.5</li>
+          <li data-speed="0.75">x0.75</li>
+          <li data-speed="1">Normal</li>
+          <li data-speed="1.25">x1.25</li>
+          <li data-speed="1.5">x1.5</li>
+          <li data-speed="1.75">x1.75</li>
+          <li data-speed="2">x2</li>
+        </ul>
+      </li>
+      <li>
+        Prueba12345
+        <ul>
+          <li>sub Prueba12345</li>
+          <li>sub Prueba12345</li>
+        </ul>
+      </li>
+      <li>
+        prueba09876
+        <ul>
+          <li>sub Prueba12345</li>
+        </ul>
+      </li>
+    </ul>
+  );
+
   return (
     <div className="footer_options">
       <Btn src_img="./assets/volume.svg" alt_img="Volume" fc={muted}>
@@ -274,7 +305,9 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
         alt_img="Volume"
         fc={fullScreen}
       ></Btn>
-      <Btn src_img="./assets/settings.svg" alt_img="Settings"></Btn>
+      <Btn src_img="./assets/settings.svg" alt_img="Settings">
+        {settings}
+      </Btn>
     </div>
   );
 };

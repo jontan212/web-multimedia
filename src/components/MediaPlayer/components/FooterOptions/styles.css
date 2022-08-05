@@ -34,7 +34,7 @@ button {
   position: absolute;
   width: 130px;
   left: -157%;
-  
+
   transform: rotate(-90deg) translateX(60%);
   -webkit-transform: rotate(-90deg) translateX(60%);
   -moz-transform: rotate(-90deg) translateX(60%);
@@ -44,7 +44,7 @@ button:hover .volume {
   display: block;
 }
 
-button .hover_volume{
+button .hover_volume {
   position: absolute;
   width: 30px;
   height: 40px;
@@ -114,4 +114,84 @@ button .hover_volume{
 
 .visible {
   display: block;
+}
+
+/* ********** SETTINGS ********** */
+.box_settings {
+  position: absolute;
+  display: flex;
+  visibility: hidden;
+  flex-wrap: wrap;
+  justify-content: center;
+  left: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  border: 2px solid var(--white-50);
+  transform: translate(-100%, -100%);
+  list-style: none;
+}
+
+button:hover .box_settings {
+  visibility: visible;
+}
+
+.box_settings > li {
+  position: relative;
+  padding: 0.5rem 1.25rem;
+  width: 100%;
+
+  color: #ffffff;
+
+  border-bottom: 0.5px solid var(--white-50);
+  background-color: var(--black-50);
+}
+
+.box_settings > li:last-child {
+  border-bottom: 0px;
+}
+
+.box_settings > li:hover {
+  background-color: var(--white-50);
+}
+
+/* SUB MENU */
+.box_settings > li > ul {
+  position: absolute;
+  display: flex;
+  visibility: hidden;
+  flex-wrap: wrap;
+  justify-content: center;
+  top: 50%;
+  left: -1px;
+
+  margin: 0;
+  padding: 0;
+
+  border: 2px solid var(--white-50);
+  transform: translate(-100%, -50%);
+  list-style: none;
+}
+
+.box_settings > li:hover > ul {
+  visibility: visible;
+}
+
+.box_settings > li > ul > li {
+  padding: 0.5rem 1.25rem;
+  width: 100%;
+
+  color: #ffffff;
+
+  border-bottom: 0.5px solid var(--white-50);
+  background-color: var(--black-50);
+}
+
+.box_settings > li > ul > li:last-child {
+  border-bottom: 0px;
+}
+
+.box_settings > li > ul > li:hover {
+  background-color: var(--white-50);
 }
