@@ -9,7 +9,8 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
 
   const [totalTime, setTotalTime] = useState(),
     [currentTime, setCurrentTime] = useState(),
-    [isMouseDown, setIsMouseDown] = useState(false);
+    [isMouseDown, setIsMouseDown] = useState(false),
+    [speedVideo, setSpeedVideo] = useState();
 
   useEffect(() => {
     // TOTAL DURATION OF THE VIDEO
@@ -238,32 +239,42 @@ const FooterOptions = ({ ref_video, ref_media, setSrc_svg }) => {
     refOnMinute.current.textContent = text.includes("-1") ? "00:00" : text;
   };
 
+  // SPEED CONTROL
+  const speedControl = (e) => {
+    let speed = e.target.getAttribute("data-speed");
+    ref_video.current.playbackRate = speed;
+    speed === "1" ? setSpeedVideo("Normal") : setSpeedVideo("x" + speed);
+  };
+
   const settings = (
     <ul className="box_settings">
       <li>
-        Velocidad:&nbsp;Normal
+        Velocidad:&nbsp;{speedVideo || "Normal"}
         <ul>
-          <li data-speed="0.25">x0.25</li>
-          <li data-speed="0.5">x0.5</li>
-          <li data-speed="0.75">x0.75</li>
-          <li data-speed="1">Normal</li>
-          <li data-speed="1.25">x1.25</li>
-          <li data-speed="1.5">x1.5</li>
-          <li data-speed="1.75">x1.75</li>
-          <li data-speed="2">x2</li>
-        </ul>
-      </li>
-      <li>
-        Prueba12345
-        <ul>
-          <li>sub Prueba12345</li>
-          <li>sub Prueba12345</li>
-        </ul>
-      </li>
-      <li>
-        prueba09876
-        <ul>
-          <li>sub Prueba12345</li>
+          <li onClick={speedControl} data-speed="0.25">
+            x0.25
+          </li>
+          <li onClick={speedControl} data-speed="0.5">
+            x0.5
+          </li>
+          <li onClick={speedControl} data-speed="0.75">
+            x0.75
+          </li>
+          <li onClick={speedControl} data-speed="1">
+            Normal
+          </li>
+          <li onClick={speedControl} data-speed="1.25">
+            x1.25
+          </li>
+          <li onClick={speedControl} data-speed="1.5">
+            x1.5
+          </li>
+          <li onClick={speedControl} data-speed="1.75">
+            x1.75
+          </li>
+          <li onClick={speedControl} data-speed="2">
+            x2
+          </li>
         </ul>
       </li>
     </ul>
