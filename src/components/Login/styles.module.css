@@ -1,0 +1,32 @@
+.login {
+  text-align: center;
+}
+
+.login h1 {
+  margin-bottom: 50px;
+}
+
+.userAccounts {
+  display: flex;
+  justify-content: center;
+  column-gap: 32px;
+
+  background-color: rgba(0, 255, 255, 0.339);
+}
+
+.profilePicture {
+  margin-bottom: 16px;
+
+  width: 96px;
+  height: 96px;
+  background-color: rgb(255, 255, 255);
+}
+
+.profilePicture img {
+  width: 100%;
+}
+
+.profilePicture ~ p {
+  font-size: 1.5rem;
+  font-weight: 600;
+}

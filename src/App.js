@@ -1,11 +1,13 @@
 // import logo from './logo.svg';
-import './App.css';
-import MediaPlayer from './components/MediaPlayer/MediaPlayer.js';
+import "./App.css";
+import Main from "./components/Main/Main.js";
+import MediaPlayer from "./components/MediaPlayer/MediaPlayer.js";
 
 function App() {
   return (
     <div className="App">
-      <MediaPlayer></MediaPlayer>
+      {/* <MediaPlayer></MediaPlayer> */}
+      <Main />
     </div>
   );
 }

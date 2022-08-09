@@ -1,0 +1,5 @@
+.main {
+  background-color: var(--main-bg-color);
+  color: var(--main-font-colour);
+  min-height: 100vh;
+}
