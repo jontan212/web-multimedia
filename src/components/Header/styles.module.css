@@ -1,0 +1,101 @@
+header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  max-width: var(--max-width);
+  height: 64px;
+  margin: auto;
+
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-align: center;
+
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: var(--box-shadow);
+  background-color: var(--main-bg-color);
+}
+
+/* PROFILE */
+.profilePicture {
+  width: 64px;
+  height: 100%;
+}
+.profilePicture img {
+  width: 100%;
+  border-bottom-left-radius: 5px;
+}
+
+/* MENU */
+header a {
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+}
+
+header > div:last-child {
+  display: flex;
+  align-items: center;
+}
+
+header ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+header > div > ul {
+  display: flex;
+  align-items: center;
+}
+
+header > div > ul > li {
+  position: relative;
+  padding: 22px 16px;
+}
+
+header > div > ul > li:hover {
+  color: var(--second-color);
+}
+
+/* SUB MENU */
+header > div > ul > li > ul {
+  position: absolute;
+  top: 99.5%;
+  left: 0;
+  display: none;
+  background-color: var(--main-bg-color);
+}
+
+header > div > ul > li:hover > ul {
+  display: block;
+}
+
+header > div > ul > li > ul > li > a {
+  display: block;
+  padding: 22px 16px;
+}
+
+header > div > ul > li > ul > li:hover > a {
+  color: black;
+  background-color: var(--second-color);
+}
+
+/* BTN EXIT */
+header div > a {
+  display: flex;
+  align-items: center;
+
+  padding: 8px 21px;
+  margin-left: 60px;
+  margin-right: 40px;
+
+  color: rgb(0, 0, 0);
+  font-weight: 600;
+
+  border-radius: 1000px;
+  background-color: rgb(255, 255, 255);
+}

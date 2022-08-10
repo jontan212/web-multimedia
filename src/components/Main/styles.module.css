@@ -1,5 +1,41 @@
 .main {
-  background-color: var(--main-bg-color);
-  color: var(--main-font-colour);
+  max-width: var(--max-width);
   min-height: 100vh;
+  margin: auto;
+  margin-top: 32px;
+}
+
+.videos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+
+  margin: 8px 0 32px 0;
+}
+
+.videos > a {
+  width: 112px;
+  height: 160px;
+
+  color: rgb(255, 255, 255);
+
+  text-decoration: none;
+  background-image: url("https://es.web.img3.acsta.net/pictures/21/09/27/11/50/4103657.jpg");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.videos > a > p {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  overflow: hidden;
+}
+
+.videos > a:hover p {
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: var(--box-shadow);
 }
